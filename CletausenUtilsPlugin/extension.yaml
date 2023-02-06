@@ -1,0 +1,7 @@
+﻿Id: CletausenUtilsPlugin_9c278c87-c78b-4d77-a4d0-c53952a11563
+Name: Cletausen Generic Plugin
+Author: Adrien Philippe
+Version: 1.0
+Module: CletausenUtilsPlugin.dll
+Type: GenericPlugin
+Icon: icon.png
