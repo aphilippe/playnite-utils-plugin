@@ -20,6 +20,12 @@ namespace CletausenUtilsPlugin
         // If you want to exclude some property from being saved then use `JsonDontSerialize` ignore attribute.
         [DontSerialize]
         public bool OptionThatWontBeSaved { get => optionThatWontBeSaved; set => SetValue(ref optionThatWontBeSaved, value); }
+        private Category demoCategory;
+        public Category DemoCategory
+        {
+            get => demoCategory;
+            set => SetValue(ref demoCategory, value);
+        }
     }
 
     public class CletausenUtilsPluginSettingsViewModel : ObservableObject, ISettings
@@ -37,6 +43,8 @@ namespace CletausenUtilsPlugin
                 OnPropertyChanged();
             }
         }
+
+        public IItemCollection<Category> AllCategories => plugin.PlayniteApi.Database.Categories;
 
         public CletausenUtilsPluginSettingsViewModel(CletausenUtilsPlugin plugin)
         {
