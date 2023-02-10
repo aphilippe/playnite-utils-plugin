@@ -1,13 +1,10 @@
 ﻿using Playnite.SDK;
 using Playnite.SDK.Events;
-using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace CletausenUtilsPlugin
 {
@@ -26,6 +23,15 @@ namespace CletausenUtilsPlugin
             {
                 HasSettings = true
             };
+
+            AddConvertersSupport(new AddConvertersSupportArgs()
+            {
+                SourceName = "CletausenUtils",
+                Converters = new List<IValueConverter>
+                {
+                    new CategoriesToIsDemoConverter(settings.Settings.DemoCategory)
+                }
+            });
         }
 
         public override void OnGameInstalled(OnGameInstalledEventArgs args)
