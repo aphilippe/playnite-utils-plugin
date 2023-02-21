@@ -3,8 +3,10 @@ using Playnite.SDK.Events;
 using Playnite.SDK.Plugins;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows.Data;
+using Playnite.SDK.Models;
 
 namespace CletausenUtilsPlugin
 {
@@ -16,8 +18,13 @@ namespace CletausenUtilsPlugin
 
         public override Guid Id { get; } = Guid.Parse("9c278c87-c78b-4d77-a4d0-c53952a11563");
 
+        public static CletausenUtilsPlugin Instance { get; private set; }
+        public CletausenUtilsPluginSettings Settings => settings.Settings;
+        
         public CletausenUtilsPlugin(IPlayniteAPI api) : base(api)
         {
+            Instance = this;
+            
             settings = new CletausenUtilsPluginSettingsViewModel(this);
             Properties = new GenericPluginProperties
             {
@@ -29,7 +36,7 @@ namespace CletausenUtilsPlugin
                 SourceName = "CletausenUtils",
                 Converters = new List<IValueConverter>
                 {
-                    new CategoriesToIsDemoConverter(settings.Settings.DemoCategory)
+                    new GameToIsDemoVisibilityConverter()
                 }
             });
         }

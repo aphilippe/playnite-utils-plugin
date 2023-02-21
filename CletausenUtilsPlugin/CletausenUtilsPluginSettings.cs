@@ -1,4 +1,5 @@
-﻿using Playnite.SDK;
+﻿using System;
+using Playnite.SDK;
 using Playnite.SDK.Data;
 using System.Collections.Generic;
 using Playnite.SDK.Models;
@@ -7,6 +8,29 @@ namespace CletausenUtilsPlugin
 {
     public class CletausenUtilsPluginSettings : ObservableObject
     {
+        private const string DemoTagName = "[CLT] Is Demo";
+        
+        
+        private Guid demoTagId = Guid.Empty;
+
+        public Guid DemoTagId
+        {
+            get
+            {
+                var plugin = CletausenUtilsPlugin.Instance;
+                
+                if (plugin != null && demoTagId == Guid.Empty)
+                {
+                    demoTagId = plugin.PlayniteApi.Database.Tags.Add(DemoTagName).Id;
+                }
+                else if (plugin != null && plugin.PlayniteApi.Database.Tags.Get(demoTagId) == null)
+                {
+                    demoTagId = plugin.PlayniteApi.Database.Tags.Add(DemoTagName).Id;
+                }
+                return demoTagId;
+            }
+        }
+
         private Category demoCategory;
         public Category DemoCategory
         {

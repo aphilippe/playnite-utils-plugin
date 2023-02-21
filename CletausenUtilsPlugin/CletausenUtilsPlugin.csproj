@@ -53,7 +53,8 @@
     <Compile Include="CletausenUtilsPluginSettingsView.xaml.cs">
       <DependentUpon>CletausenUtilsPluginSettingsView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameToIsDemoConverter.cs" />
+    <Compile Include="ExtensionClass\GameExtension.cs" />
+    <Compile Include="GameToIsDemoVisibilityConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

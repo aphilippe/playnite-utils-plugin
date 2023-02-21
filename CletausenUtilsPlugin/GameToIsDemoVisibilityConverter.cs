@@ -1,27 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
+using CletausenUtilsPlugin.ExtensionClass;
 using Playnite.SDK.Models;
 
 namespace CletausenUtilsPlugin
 {
-    public class CategoriesToIsDemoConverter : IValueConverter
+    public class GameToIsDemoVisibilityConverter : IValueConverter
     {
-        private Category _demoCategory;
-
-        public CategoriesToIsDemoConverter(Category demoCategory)
+        public GameToIsDemoVisibilityConverter()
         {
-            _demoCategory = demoCategory;
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var categories = value as List<Category>;
-            if (categories == null)
-                return false;
+            var game = value as Game;
 
-            return categories.Contains(_demoCategory);
+            if (game == null) return false;
+            
+            var isDemo = game.IsDemo();
+            
+            return game.IsDemo() ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
