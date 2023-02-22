@@ -1,13 +1,14 @@
 ﻿using Playnite.SDK;
 using Playnite.SDK.Events;
-using Playnite.SDK.Models;
 using Playnite.SDK.Plugins;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 using System.Windows.Controls;
+using System.Windows.Data;
+using CletausenUtilsPlugin.Converters;
+using CletausenUtilsPlugin.ExtensionClass;
+using Playnite.SDK.Models;
 
 namespace CletausenUtilsPlugin
 {
@@ -19,12 +20,56 @@ namespace CletausenUtilsPlugin
 
         public override Guid Id { get; } = Guid.Parse("9c278c87-c78b-4d77-a4d0-c53952a11563");
 
+        public static CletausenUtilsPlugin Instance { get; private set; }
+        public CletausenUtilsPluginSettings Settings => settings.Settings;
+        
         public CletausenUtilsPlugin(IPlayniteAPI api) : base(api)
         {
+            Instance = this;
+            
             settings = new CletausenUtilsPluginSettingsViewModel(this);
             Properties = new GenericPluginProperties
             {
                 HasSettings = true
+            };
+
+            AddConvertersSupport(new AddConvertersSupportArgs
+            {
+                SourceName = "CletausenUtils",
+                Converters = new List<IValueConverter>
+                {
+                    new TagsToIsDemoVisibilityConverter()
+                }
+            });
+        }
+
+        public override IEnumerable<GameMenuItem> GetGameMenuItems(GetGameMenuItemsArgs args)
+        {
+            yield return new GameMenuItem
+            {
+                Description = "Toggle Demo",
+                Action = (a) =>
+                {
+                    using (PlayniteApi.Database.BufferedUpdate())
+                    {
+                        foreach (var game in a.Games)
+                        {
+                            var tagIds = game.TagIds ?? new List<Guid>();
+                            
+                            if (game.IsDemo())
+                            {
+                                tagIds.Remove(Settings.DemoTagId);
+                            }
+                            else
+                            {
+                                tagIds.Add(Settings.DemoTagId);
+                            }
+
+                            game.TagIds = tagIds;
+                            PlayniteApi.Database.Games.Update(game);
+                        }
+                    }
+                }
             };
         }
 

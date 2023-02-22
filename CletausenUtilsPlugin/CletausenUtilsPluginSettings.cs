@@ -1,25 +1,44 @@
-﻿using Playnite.SDK;
+﻿using System;
+using Playnite.SDK;
 using Playnite.SDK.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
+using Playnite.SDK.Models;
 
 namespace CletausenUtilsPlugin
 {
     public class CletausenUtilsPluginSettings : ObservableObject
     {
-        private string option1 = string.Empty;
-        private bool option2 = false;
-        private bool optionThatWontBeSaved = false;
+        private const string DemoTagName = "[CLT] Is Demo";
+        
+        
+        private Guid demoTagId = Guid.Empty;
 
-        public string Option1 { get => option1; set => SetValue(ref option1, value); }
-        public bool Option2 { get => option2; set => SetValue(ref option2, value); }
-        // Playnite serializes settings object to a JSON object and saves it as text file.
-        // If you want to exclude some property from being saved then use `JsonDontSerialize` ignore attribute.
-        [DontSerialize]
-        public bool OptionThatWontBeSaved { get => optionThatWontBeSaved; set => SetValue(ref optionThatWontBeSaved, value); }
+        public Guid DemoTagId
+        {
+            get
+            {
+                var plugin = CletausenUtilsPlugin.Instance;
+                
+                if (plugin != null && demoTagId == Guid.Empty)
+                {
+                    demoTagId = plugin.PlayniteApi.Database.Tags.Add(DemoTagName).Id;
+                }
+                else if (plugin != null && plugin.PlayniteApi.Database.Tags.Get(demoTagId) == null)
+                {
+                    demoTagId = plugin.PlayniteApi.Database.Tags.Add(DemoTagName).Id;
+                }
+                return demoTagId;
+            }
+        }
+
+        private Category demoCategory;
+        public Category DemoCategory
+        {
+            get => demoCategory;
+            set => SetValue(ref demoCategory, value);
+        }
     }
 
     public class CletausenUtilsPluginSettingsViewModel : ObservableObject, ISettings
@@ -37,6 +56,8 @@ namespace CletausenUtilsPlugin
                 OnPropertyChanged();
             }
         }
+
+        public IItemCollection<Category> AllCategories => plugin.PlayniteApi.Database.Categories;
 
         public CletausenUtilsPluginSettingsViewModel(CletausenUtilsPlugin plugin)
         {
