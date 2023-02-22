@@ -53,8 +53,8 @@
     <Compile Include="CletausenUtilsPluginSettingsView.xaml.cs">
       <DependentUpon>CletausenUtilsPluginSettingsView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\TagsToIsDemoVisibilityConverter.cs" />
     <Compile Include="ExtensionClass\GameExtension.cs" />
-    <Compile Include="GameToIsDemoVisibilityConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +82,9 @@
     <None Include="icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

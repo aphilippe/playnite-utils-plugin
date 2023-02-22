@@ -2,6 +2,8 @@
 using Playnite.SDK;
 using Playnite.SDK.Data;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using Playnite.SDK.Models;
 
 namespace CletausenUtilsPlugin
